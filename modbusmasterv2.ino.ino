@@ -183,14 +183,14 @@ for (int RegisterRef=0; RegisterRef<(TOTAL_NO_OF_PACKETS); RegisterRef++){
 
 
 
-if (NodePointer == 2) regs[RegisterRef] = 0; //turn off outputs
+if (NodePointer == 1) regs[RegisterRef] = 0; //turn off outputs
 
    word HighSetpoint=4000;  // need to change this to use eeprom later...this the mv value where the alarm is set off
-if (NodePointer == 3) regs[RegisterRef] = HighSetpoint;
+if (NodePointer == 2) regs[RegisterRef] = HighSetpoint;
  word LowSetpoint=2500;  // need to change this to use eeprom later...this is the mv value where the alarm is set off (lower)
-if (NodePointer == 4) regs[RegisterRef] = LowSetpoint;
+if (NodePointer == 3) regs[RegisterRef] = LowSetpoint;
 word dumpSetpoint=3900;  // need to change this to use eeprom later..this is the mv value where the dump kicks in.
-if (NodePointer == 5) regs[RegisterRef] = dumpSetpoint;  //set outputs to off.
+if (NodePointer == 4) regs[RegisterRef] = dumpSetpoint;  //set outputs to off.
 
 }
 
