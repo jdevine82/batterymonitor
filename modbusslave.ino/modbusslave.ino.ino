@@ -1,5 +1,5 @@
 #include <SimpleModbusSlave.h>
-
+#include <string.h>
 /* 
    SimpleModbusSlaveV10 supports function 3, 6 & 16.
    
@@ -109,5 +109,22 @@ void loop()
      analogWrite(LED, holdingRegs[1]/4);
   */
   
+}
+
+
+ 
+/**
+ * Reform two 16bit unsigned integers that store one 32bit
+ * signed float (little endian).
+ * @param u1 the first 16bit unsigned
+ * @param u2 the second 16bit unsigned
+ * return the 32bit float
+ */
+float reform_uint16_2_float32(uint16_t u1, uint16_t u2)
+{
+    long int num = ((u2 & 0xFFFF) << 16) | (u1 & 0xFFFF);
+    float numf;
+    memcpy(&numf, &num, 4);
+    return numf;
 }
 
