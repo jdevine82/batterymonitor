@@ -31,7 +31,7 @@
 */
 
 
-
+#define slavenumber 1
 #define LowerCellDump 13 //hardware pin
 #define UpperCellDump 4 //hardware pin
 #define AlarmOutput 5 //hardware pin
@@ -88,11 +88,11 @@ void setup()
      These byte formats are already defined in the Arduino global name space. 
   */
 	
-  modbus_configure(&Serial, 9600, SERIAL_8N2, 2, 10, HOLDING_REGS_SIZE, holdingRegs);  //slave id will need to change some code to read hardware pins and set this
+  modbus_configure(&Serial, 9600, SERIAL_8N2, slaveno, 10, HOLDING_REGS_SIZE, holdingRegs);  //slave id will need to change some code to read hardware pins and set this
 
   // modbus_update_comms(baud, byteFormat, id) is not needed but allows for easy update of the
   // port variables and slave id dynamically in any function.
-  modbus_update_comms(9600, SERIAL_8N2, 2);   //slave id will need to change some code to read hardware pins and set this
+  modbus_update_comms(9600, SERIAL_8N2, slaveno);   //slave id will need to change some code to read hardware pins and set this
   
   pinMode(LowerCellDump, OUTPUT);
   pinMode(UpperCellDump, OUTPUT);

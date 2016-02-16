@@ -157,8 +157,8 @@ void setup()
     int ModbusAddress = RegisterRef%10;
     int NodeId = RegisterRef/10;
   
- if ((ModbusAddress=0) || (ModbusAddress=5))  modbus_construct(&packets[(RegisterRef-10)], (NodeId), READ_HOLDING_REGISTERS,ModbusAddress, 1, (RegisterRef-10));
-if ((ModbusAddress=1) || (ModbusAddress=6))  modbus_construct(&packets[(RegisterRef-10)], (NodeId), PRESET_MULTIPLE_REGISTERS,ModbusAddress, 4, (RegisterRef-10));
+ if ((ModbusAddress==0) || (ModbusAddress==5))  modbus_construct(&packets[(RegisterRef-10)], (NodeId), READ_HOLDING_REGISTERS,ModbusAddress, 1, (RegisterRef-10));
+if ((ModbusAddress==1) || (ModbusAddress==6))  modbus_construct(&packets[(RegisterRef-10)], (NodeId), PRESET_MULTIPLE_REGISTERS,ModbusAddress, 4, (RegisterRef-10));
   }
 
   
