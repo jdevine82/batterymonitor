@@ -89,11 +89,11 @@ void setup()
      These byte formats are already defined in the Arduino global name space. 
   */
 	
-  modbus_configure(&Serial, 9600, SERIAL_8N2, 0, 10, HOLDING_REGS_SIZE, holdingRegs);  //slave id will need to change some code to read hardware pins and set this
+  modbus_configure(&Serial, 9600, SERIAL_8N2, 1, 10, HOLDING_REGS_SIZE, holdingRegs);  //slave id will need to change some code to read hardware pins and set this
 
   // modbus_update_comms(baud, byteFormat, id) is not needed but allows for easy update of the
   // port variables and slave id dynamically in any function.
-  modbus_update_comms(9600, SERIAL_8N2, 0);   //slave id will need to change some code to read hardware pins and set this
+  modbus_update_comms(9600, SERIAL_8N2, 1);   //slave id will need to change some code to read hardware pins and set this
   
   pinMode(LowerCellDump, OUTPUT);
   pinMode(UpperCellDump, OUTPUT);
@@ -107,12 +107,12 @@ void loop()
   // for fault finding by the modbus master.
   
   modbus_update();
-  word cellvoltage=GetAveragePinReads(0);  //read and aveage voltage then put into register
+  word cellvoltage=analogRead(A0);  //read and aveage voltage then put into register
   if (cellvoltage>holdingRegs[Cell1TopSetpoint]) digitalWrite(AlarmOutput,HIGH);else digitalWrite(AlarmOutput,LOW); //turn on alarm for external shutdown
    if (cellvoltage<holdingRegs[Cell1BottomSetpoint]) digitalWrite(AlarmOutput,HIGH);else digitalWrite(AlarmOutput,LOW); //turn on alarm for external shutdown
      if (cellvoltage>holdingRegs[Cell1DumpSetpoint])  digitalWrite(LowerCellDump,HIGH); else digitalWrite(LowerCellDump,LOW); //turn on alarm for external shutdown
 holdingRegs[Cell1Voltage]=cellvoltage;  //put into register 
- cellvoltage=GetAveragePinReads(1);  //read and aveage voltage then put into register
+ cellvoltage=analogRead(A0);  //read and aveage voltage then put into register
   if (cellvoltage>holdingRegs[Cell2TopSetpoint]) digitalWrite(AlarmOutput,HIGH);else digitalWrite(AlarmOutput,LOW); //turn on alarm for external shutdown
    if (cellvoltage<holdingRegs[Cell2BottomSetpoint]) digitalWrite(AlarmOutput,HIGH);else digitalWrite(AlarmOutput,LOW); //turn on alarm for external shutdown
      if (cellvoltage>holdingRegs[Cell2DumpSetpoint]) digitalWrite(UpperCellDump,LOW); else digitalWrite(UpperCellDump,HIGH); //turn on alarm for external shutdown

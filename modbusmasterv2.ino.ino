@@ -13,12 +13,6 @@ Later additions will include a data connection to the outside world... possible 
 */
 
 
-
-
-
-
-
-
 //////////////////// Port information ///////////////////
 #define baud 9600
 #define timeout 1000
@@ -159,12 +153,12 @@ unsigned int regs[TOTAL_NO_OF_PACKETS];
 void setup()
 {
   // Initialize each packet
-  for (int RegisterRef=0; RegisterRef<(TOTAL_NO_OF_PACKETS); RegisterRef++) {
+  for (int RegisterRef=5; RegisterRef<=10; RegisterRef++) {
     int ModbusAddress = RegisterRef%5;
     int NodeId = RegisterRef/5;
   
- if (ModbusAddress<2)  modbus_construct(&packets[RegisterRef], NodeId, READ_HOLDING_REGISTERS,ModbusAddress, 1, RegisterRef);
- else modbus_construct(&packets[RegisterRef], NodeId, PRESET_MULTIPLE_REGISTERS,ModbusAddress, 4, RegisterRef);
+ if (ModbusAddress<2)  modbus_construct(&packets[(RegisterRef-5)], NodeId, READ_HOLDING_REGISTERS,ModbusAddress, 1, (RegisterRef-5));
+ else modbus_construct(&packets[(RegisterRef-5)], NodeId, PRESET_MULTIPLE_REGISTERS,ModbusAddress, 4, (RegisterRef-5));
   }
 
   
@@ -177,20 +171,20 @@ void setup()
 //now send setpoints to all nodes in array of reg...
 
 
-for (int RegisterRef=0; RegisterRef<(TOTAL_NO_OF_PACKETS); RegisterRef++){
+for (int RegisterRef=5; RegisterRef<=10; RegisterRef++){
      int NodePointer = RegisterRef%5;
 
 
 
 
-if (NodePointer == 1) regs[RegisterRef] = 0; //turn off outputs
+if (NodePointer == 1) regs[(RegisterRef-5)] = 0; //turn off outputs
 
    word HighSetpoint=4000;  // need to change this to use eeprom later...this the mv value where the alarm is set off
-if (NodePointer == 2) regs[RegisterRef] = HighSetpoint;
+if (NodePointer == 2) regs[(RegisterRef-5)] = HighSetpoint;
  word LowSetpoint=2500;  // need to change this to use eeprom later...this is the mv value where the alarm is set off (lower)
-if (NodePointer == 3) regs[RegisterRef] = LowSetpoint;
+if (NodePointer == 3) regs[(RegisterRef-5)] = LowSetpoint;
 word dumpSetpoint=3900;  // need to change this to use eeprom later..this is the mv value where the dump kicks in.
-if (NodePointer == 4) regs[RegisterRef] = dumpSetpoint;  //set outputs to off.
+if (NodePointer == 4) regs[(RegisterRef-5)] = dumpSetpoint;  //set outputs to off.
 
 }
 
@@ -207,10 +201,11 @@ void Floatsplit(float f) {
 void loop()
 {
   modbus_update();
-for (int nodeid=0;nodeid<=12;nodeid++){
+for (int nodeid=0;nodeid<=1;nodeid++){
   CellVoltages[nodeid]=regs[(nodeid*5)];//keep in seperate array...
 
   //do do some display...
+  if (CellVoltages[0]>10) digitalWrite(LED,HIGH); else digitalWrite(LED,LOW);
 }
 
   
