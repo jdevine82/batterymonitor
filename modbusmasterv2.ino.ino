@@ -27,8 +27,8 @@ Later additions will include a data connection to the outside world... possible 
 // The total amount of available memory on the master to store data
 //#define TOTAL_NO_OF_REGISTERS 1
  unsigned int scratchpad1, scratchpad2;  //used by floatsplit
-
- unsigned long CellVoltages[12]; //array of voltages as floats for general use, display and output
+long timerstart;
+ unsigned long CellVoltages[12]; //array of voltages as mv for general use, display and output
 // This is the easiest way to create new packets
 // Add as many as you want. TOTAL_NO_OF_PACKETS
 // is automatically updated.
@@ -158,7 +158,7 @@ void setup()
     int NodeId = RegisterRef/10;
   
  if ((ModbusAddress=0) || (ModbusAddress=5))  modbus_construct(&packets[(RegisterRef-10)], (NodeId), READ_HOLDING_REGISTERS,ModbusAddress, 1, (RegisterRef-10));
- else modbus_construct(&packets[(RegisterRef-5)], (NodeId), PRESET_MULTIPLE_REGISTERS,ModbusAddress, 1, (RegisterRef-10));
+if ((ModbusAddress=1) || (ModbusAddress=6))  modbus_construct(&packets[(RegisterRef-10)], (NodeId), PRESET_MULTIPLE_REGISTERS,ModbusAddress, 4, (RegisterRef-10));
   }
 
   
@@ -187,7 +187,7 @@ word dumpSetpoint=3900;  // need to change this to use eeprom later..this is the
 if (NodePointer == 4) regs[(RegisterRef-5)] = dumpSetpoint;  //set outputs to off.
 
 }
-
+timerstart = millis();
 }
 
 void Floatsplit(float f) {
@@ -204,11 +204,25 @@ void loop()
 for (int nodeid=0;nodeid<=3;nodeid++){
   CellVoltages[nodeid]=regs[(nodeid*5)];//keep in seperate array...
 
-  //do do some display...
+  //do some display...
   if (CellVoltages[3]>10) digitalWrite(LED,HIGH); else digitalWrite(LED,LOW);
 }
 
-  
+  if ((millis()> (timerstart+5000)) && (millis()< (timerstart+10000))) {
+  regs[1] = 1; //turn on cell dump of cell1
+  digitalWrite(13,HIGH);
+
+}
+ if (millis()> (timerstart+10000)) {
+  regs[1] =0;
+  digitalWrite(13,LOW);
+
+
+  timerstart=millis();
+ }
+
+
+   
  // analogWrite(LED, regs[0]>>2); // constrain adc value from the arduino slave to 255
 }
 
