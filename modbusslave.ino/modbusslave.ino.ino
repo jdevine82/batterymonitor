@@ -112,7 +112,7 @@ void loop()
    if (cellvoltage<holdingRegs[Cell1BottomSetpoint]) digitalWrite(AlarmOutput,HIGH);else digitalWrite(AlarmOutput,LOW); //turn on alarm for external shutdown
      if (cellvoltage>holdingRegs[Cell1DumpSetpoint])  digitalWrite(LowerCellDump,HIGH); else digitalWrite(LowerCellDump,LOW); //turn on alarm for external shutdown
 holdingRegs[Cell1Voltage]=cellvoltage;  //put into register 
- cellvoltage=analogRead(A0);  //read and aveage voltage then put into register
+ cellvoltage=analogRead(A1);  //read and aveage voltage then put into register
   if (cellvoltage>holdingRegs[Cell2TopSetpoint]) digitalWrite(AlarmOutput,HIGH);else digitalWrite(AlarmOutput,LOW); //turn on alarm for external shutdown
    if (cellvoltage<holdingRegs[Cell2BottomSetpoint]) digitalWrite(AlarmOutput,HIGH);else digitalWrite(AlarmOutput,LOW); //turn on alarm for external shutdown
      if (cellvoltage>holdingRegs[Cell2DumpSetpoint]) digitalWrite(UpperCellDump,LOW); else digitalWrite(UpperCellDump,HIGH); //turn on alarm for external shutdown

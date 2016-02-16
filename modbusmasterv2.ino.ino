@@ -153,12 +153,12 @@ unsigned int regs[TOTAL_NO_OF_PACKETS];
 void setup()
 {
   // Initialize each packet
-  for (int RegisterRef=5; RegisterRef<=10; RegisterRef++) {
-    int ModbusAddress = RegisterRef%5;
-    int NodeId = RegisterRef/5;
+  for (int RegisterRef=10; RegisterRef<=30; RegisterRef++) {
+    int ModbusAddress = RegisterRef%10;
+    int NodeId = RegisterRef/10;
   
- if (ModbusAddress<2)  modbus_construct(&packets[(RegisterRef-5)], NodeId, READ_HOLDING_REGISTERS,ModbusAddress, 1, (RegisterRef-5));
- else modbus_construct(&packets[(RegisterRef-5)], NodeId, PRESET_MULTIPLE_REGISTERS,ModbusAddress, 4, (RegisterRef-5));
+ if ((ModbusAddress=0) || (ModbusAddress=5))  modbus_construct(&packets[(RegisterRef-10)], (NodeId), READ_HOLDING_REGISTERS,ModbusAddress, 1, (RegisterRef-10));
+ else modbus_construct(&packets[(RegisterRef-5)], (NodeId), PRESET_MULTIPLE_REGISTERS,ModbusAddress, 1, (RegisterRef-10));
   }
 
   
@@ -171,7 +171,7 @@ void setup()
 //now send setpoints to all nodes in array of reg...
 
 
-for (int RegisterRef=5; RegisterRef<=10; RegisterRef++){
+for (int RegisterRef=5; RegisterRef<=20; RegisterRef++){
      int NodePointer = RegisterRef%5;
 
 
@@ -201,11 +201,11 @@ void Floatsplit(float f) {
 void loop()
 {
   modbus_update();
-for (int nodeid=0;nodeid<=1;nodeid++){
+for (int nodeid=0;nodeid<=3;nodeid++){
   CellVoltages[nodeid]=regs[(nodeid*5)];//keep in seperate array...
 
   //do do some display...
-  if (CellVoltages[0]>10) digitalWrite(LED,HIGH); else digitalWrite(LED,LOW);
+  if (CellVoltages[3]>10) digitalWrite(LED,HIGH); else digitalWrite(LED,LOW);
 }
 
   
